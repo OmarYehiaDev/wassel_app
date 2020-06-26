@@ -15,7 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
           "وصل",
           style: TextStyle(
             fontFamily: "Blue-Ocean",
-            fontSize: 20,
+            fontSize: 23,
           ),
         ),
       ),
