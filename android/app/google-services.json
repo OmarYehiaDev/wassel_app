@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1014569052280-ur7u7uv81le2mnrbvfeubsuethi8lvul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wassel_app",
+            "certificate_hash": "b27e3b8a38a45261a53565d5489ba19942e6137c"
+          }
+        },
+        {
           "client_id": "1014569052280-1ush0cbphiabfptcjqs7bt2f0ujvdfav.apps.googleusercontent.com",
           "client_type": 3
         }

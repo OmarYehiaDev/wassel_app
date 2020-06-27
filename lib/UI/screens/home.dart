@@ -19,8 +19,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: Center(
-        child: Text("This is HomePage"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Text("Hello There"),
+          ],
+        ),
       ),
     );
   }

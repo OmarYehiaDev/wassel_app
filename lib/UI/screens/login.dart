@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter/services.dart';
+import 'dart:math' as math;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,24 +10,155 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  String phoneNo;
+  String smsOTP;
+  String verificationId;
+  String errorMessage = '';
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> verifyPhone() async {
+    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+      smsOTPDialog(context).then((value) {
+        print('sign in');
+      });
+    };
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: this.phoneNo, // PHONE NUMBER TO SEND OTP
+          codeAutoRetrievalTimeout: (String verId) {
+            //Starts the phone number verification process for the given phone number.
+            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
+            this.verificationId = verId;
+          },
+          codeSent:
+              smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+          timeout: const Duration(seconds: 20),
+          verificationCompleted: (AuthCredential phoneAuthCredential) {
+            print(phoneAuthCredential);
+          },
+          verificationFailed: (AuthException exceptio) {
+            print('${exceptio.message}');
+          });
+    } catch (e) {
+      handleError(e);
+    }
+  }
+
+  Future<bool> smsOTPDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: Text('Enter SMS Code'),
+          content: Container(
+            height: 85,
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    this.smsOTP = value;
+                  },
+                ),
+                (errorMessage != ''
+                    ? Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Container()),
+              ],
+            ),
+          ),
+          contentPadding: EdgeInsets.all(10),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Done'),
+              onPressed: () {
+                _auth.currentUser().then(
+                  (user) {
+                    if (user != null) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed('/homepage');
+                    } else {
+                      signIn();
+                    }
+                  },
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  signIn() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId,
+        smsCode: smsOTP,
+      );
+      final FirebaseUser user =
+          (await _auth.signInWithCredential(credential)).user;
+      final FirebaseUser currentUser = await _auth.currentUser();
+      assert(user.uid == currentUser.uid);
+      Navigator.of(context).pop();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+    } catch (e) {
+      handleError(e);
+    }
+  }
+
+  handleError(PlatformException error) {
+    print(error);
+    switch (error.code) {
+      case 'ERROR_INVALID_VERIFICATION_CODE':
+        FocusScope.of(context).requestFocus(new FocusNode());
+        setState(() {
+          errorMessage = 'Invalid Code';
+        });
+        Navigator.of(context).pop();
+        smsOTPDialog(context).then((value) {
+          print('sign in');
+        });
+        break;
+      default:
+        setState(() {
+          errorMessage = error.message;
+        });
+        break;
+    }
+  }
+
   AnimationController controller;
-  Animation<double> logoAnimation;
+  Animation<Offset> logoAnimation;
   Animation<Offset> curveAnimation;
-  Widget logo;
+  Animation<Offset> bikeAnimation;
+  Animation<Offset> deliveryAnimation;
 
   initState() {
     super.initState();
-    logo = Image.asset("assets/images/wassal.png");
     controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
-    logoAnimation = CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeInCirc,
-    );
+    logoAnimation = Tween<Offset>(
+      begin: Offset(0.0, -0.4),
+      end: Offset.zero,
+    ).animate(controller);
     curveAnimation = Tween<Offset>(
       begin: Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(controller);
+
+    bikeAnimation = Tween<Offset>(
+      begin: Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(controller);
+
+    deliveryAnimation = Tween<Offset>(
+      begin: Offset(-1.0, 0.0),
       end: Offset.zero,
     ).animate(controller);
 
@@ -33,49 +167,77 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return SafeArea(
       child: Scaffold(
-        body: Stack(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: true,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Column(
               children: <Widget>[
-                FadeTransition(
-                  opacity: logoAnimation,
-                  child: logo,
+                SlideTransition(
+                  position: logoAnimation,
+                  child: Image.asset("assets/images/wassal.png"),
                 ),
-
-                FittedBox(
-                  child: GoogleSignInButton(
-                    borderRadius: 40,
-                    onPressed: () {},
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        prefixText: "+20",
+                        helperText: 'Enter Phone Number Eg. +20XXXXXXXXXX'),
+                    onChanged: (value) {
+                      this.phoneNo = value;
+                    },
                   ),
+                ),
+                (errorMessage != ''
+                    ? Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Container()),
+                RaisedButton(
+                  onPressed: () {
+                    verifyPhone();
+                  },
+                  child: Text('Verify'),
+                  textColor: Colors.white,
+                  elevation: 5,
+                  color: Colors.blue,
                 )
-                // RaisedButton(
-                //   child: Row(
-                //     mainAxisSize: MainAxisSize.min,
-                //     children: <Widget>[
-                //       Padding(
-                //         padding: const EdgeInsets.only(right: 8.0),
-                //         child: Icon(Icons.ac_unit),
-                //       ),
-                //       Text("SignIn with Gmail"),
-                //     ],
-                //   ),
-                //   onPressed: () {},
-                // ),
               ],
             ),
-            SlideTransition(
-              position: curveAnimation,
-              child: Container(
-                width: width,
-                height: height,
-                child: CustomPaint(
-                  painter: CurvePainter(),
-                ),
+            Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  SlideTransition(
+                    position: bikeAnimation,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(math.pi),
+                      child: Container(
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/bike.png",
+                            scale: 4,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SlideTransition(
+                    position: deliveryAnimation,
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/delivery.png",
+                        scale: 4,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
