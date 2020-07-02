@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wassel_app/UI/screens/login.dart';
-// import 'UI/screens/home.dart';
+import 'UI/screens/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(),
+      home: MyHomePage(),
     );
   }
 }

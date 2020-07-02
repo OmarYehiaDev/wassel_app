@@ -1,7 +1,9 @@
+import 'dart:math' as math;
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  Widget logoImg;
   String phoneNo;
   String smsOTP;
   String verificationId;
@@ -18,9 +21,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Future<void> verifyPhone() async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
-      smsOTPDialog(context).then((value) {
-        print('sign in');
-      });
+      smsOTPDialog(context).then(
+        (value) {
+          print('sign in');
+        },
+      );
     };
     try {
       await _auth.verifyPhoneNumber(
@@ -78,7 +83,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   (user) {
                     if (user != null) {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed('/homepage');
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => MyHomePage(),
+                        ),
+                      );
                     } else {
                       signIn();
                     }
@@ -103,8 +112,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
       Navigator.of(context).pop();
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
     } catch (e) {
       handleError(e);
     }
@@ -139,6 +151,21 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   initState() {
     super.initState();
+    logoImg = Image(
+      image: AssetImage("assets/images/wassalWhite.png"),
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        } else {
+          return Container(
+            width: 512,
+            height: 512,
+            color: Colors.white,
+          );
+        }
+      },
+    );
+
     controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -171,76 +198,87 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         resizeToAvoidBottomPadding: true,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                SlideTransition(
-                  position: logoAnimation,
-                  child: Image.asset("assets/images/wassal.png"),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        prefixText: "+20",
-                        helperText: 'Enter Phone Number Eg. +20XXXXXXXXXX'),
-                    onChanged: (value) {
-                      this.phoneNo = value;
-                    },
-                  ),
-                ),
-                (errorMessage != ''
-                    ? Text(
-                        errorMessage,
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : Container()),
-                RaisedButton(
-                  onPressed: () {
-                    verifyPhone();
-                  },
-                  child: Text('Verify'),
-                  textColor: Colors.white,
-                  elevation: 5,
-                  color: Colors.blue,
-                )
-              ],
-            ),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   SlideTransition(
-                    position: bikeAnimation,
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(math.pi),
-                      child: Container(
-                        child: Center(
-                          child: Image.asset(
-                            "assets/images/bike.png",
-                            scale: 4,
+                    position: logoAnimation,
+                    child: logoImg,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: TextField(
+                      enableInteractiveSelection: true,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                        hintText: 'Enter Phone Number Eg. 01XXXXXXXXXX',
+                      ),
+                      onChanged: (value) {
+                        this.phoneNo = "+2" + "$value";
+                      },
+                    ),
+                  ),
+                  (errorMessage != ''
+                      ? Text(
+                          errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container()),
+                  RaisedButton(
+                    onPressed: () {
+                      verifyPhone();
+                    },
+                    child: Text('Verify'),
+                    textColor: Colors.white,
+                    elevation: 5,
+                    color: Color.fromRGBO(28, 179, 54, 1.0),
+                  )
+                ],
+              ),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    SlideTransition(
+                      position: bikeAnimation,
+                      child: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.rotationY(math.pi),
+                        child: Container(
+                          child: Center(
+                            child: Image.asset(
+                              "assets/images/bike.png",
+                              scale: 4,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  SlideTransition(
-                    position: deliveryAnimation,
-                    child: Container(
-                      child: Image.asset(
-                        "assets/images/delivery.png",
-                        scale: 4,
+                    SlideTransition(
+                      position: deliveryAnimation,
+                      child: Container(
+                        child: Image.asset(
+                          "assets/images/delivery.png",
+                          scale: 4,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
