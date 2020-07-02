@@ -87,20 +87,28 @@ class _UploadOrderScreenState extends State<UploadOrderScreen> {
     final Size size = MediaQuery.of(context).size;
     final double height = size.height;
     // final double width = size.width;
-
     return Scaffold(
       appBar: AppBar(),
       key: _key,
       body: ListView(
         children: <Widget>[
           Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 3.5,
+              ),
+            ),
             margin: const EdgeInsets.all(5.0),
             height: height * 0.65,
             child: imageFile == null
-                ? Text("Take or select photo")
+                ? Center(
+                    child: Text("Take or select photo"),
+                  )
                 : Image.file(imageFile),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               RaisedButton(
                 onPressed: () {

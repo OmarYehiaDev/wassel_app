@@ -36,7 +36,10 @@ class _UploaderState extends State<Uploader> {
               event != null ? event.bytesTransferred / event.totalByteCount : 0;
           return Column(
             children: <Widget>[
-              if (_uploadTask.isComplete) Text("Upload is completed"),
+              if (_uploadTask.isComplete)
+                Text(
+                  "Upload is completed",
+                ),
               if (_uploadTask.isPaused)
                 FlatButton(
                   child: Icon(Icons.play_arrow),
