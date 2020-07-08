@@ -22,19 +22,19 @@ class _UploadOrderScreenState extends State<UploadOrderScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("From where do you want to take the photo?"),
+          title: Text("ما هو مصدر صورة طلبك؟"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 GestureDetector(
-                  child: Text("Gallery"),
+                  child: Text("معرض الصور"),
                   onTap: () {
                     pickImage(ImageSource.gallery, context);
                   },
                 ),
                 Padding(padding: EdgeInsets.all(8.0)),
                 GestureDetector(
-                  child: Text("Camera"),
+                  child: Text("الكاميرا"),
                   onTap: () {
                     pickImage(ImageSource.camera, context);
                   },
@@ -103,7 +103,7 @@ class _UploadOrderScreenState extends State<UploadOrderScreen> {
             height: height * 0.65,
             child: imageFile == null
                 ? Center(
-                    child: Text("Take or select photo"),
+                    child: Text("أدخل أو قُم بإخذ صورة لطلبك"),
                   )
                 : Image.file(imageFile),
           ),

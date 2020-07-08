@@ -18,11 +18,15 @@ class _UploaderState extends State<Uploader> {
   StorageUploadTask _uploadTask;
   void startUpload() {
     String filePath = "images/${DateTime.now()}.png";
-    setState(
-      () {
-        _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
-      },
-    );
+    try {
+      setState(
+        () {
+          _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
+        },
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -38,7 +42,7 @@ class _UploaderState extends State<Uploader> {
             children: <Widget>[
               if (_uploadTask.isComplete)
                 Text(
-                  "Upload is completed",
+                  "انتهى التحميل",
                 ),
               if (_uploadTask.isPaused)
                 FlatButton(
@@ -70,7 +74,7 @@ class _UploaderState extends State<Uploader> {
           startUpload();
         },
         icon: Icon(Icons.cloud_upload),
-        label: Text("Upload image"),
+        label: Text("قُم بتحميل صورة طلبك"),
       );
     }
   }

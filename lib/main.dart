@@ -16,7 +16,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: MyHomePage(),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wassel_app/UI/widgets/myDrawer.dart';
 import 'uploadOrderScreen.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -40,10 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 15.0,
-              vertical: height * 0.05,
+              vertical: height * 0.09,
             ),
             child: Text(
-              "Our services",
+              "خدماتنا",
               style: TextStyle(
                 fontFamily: "Blue-Ocean",
                 fontWeight: FontWeight.w600,
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Positioned(
                         child: Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.centerLeft,
                           child: Card(
                             elevation: 5,
                             child: Container(
@@ -81,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      left: width * 0.07,
+                                      right: width * 0.07,
                                     ),
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -91,11 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       height: height * 0.038,
                                       width: width * 0.2,
                                       padding: EdgeInsets.only(
-                                        right: width * 0.032,
+                                        left: width * 0.032,
                                       ),
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: Text(
-                                        "Send",
+                                        "إرسال",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500,
@@ -109,10 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      left: width * 0.145,
+                                      right: width * 0.145,
                                     ),
                                     child: Text(
-                                      "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
+                                      "لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم",
                                     ),
                                   ),
                                 ],
@@ -122,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.centerRight,
                         child: Card(
                           elevation: 10,
                           child: Container(
@@ -159,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Positioned(
                         child: Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.centerLeft,
                           child: Card(
                             elevation: 5,
                             child: Container(
@@ -171,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      left: width * 0.07,
+                                      right: width * 0.07,
                                     ),
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -181,11 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       height: height * 0.038,
                                       width: width * 0.2,
                                       padding: EdgeInsets.only(
-                                        right: width * 0.032,
+                                        left: width * 0.032,
                                       ),
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: Text(
-                                        "Buy",
+                                        "شراء",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500,
@@ -199,10 +200,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      left: width * 0.145,
+                                      right: width * 0.145,
                                     ),
                                     child: Text(
-                                      "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum",
+                                      "لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم لوريم ايبسوم",
                                     ),
                                   ),
                                 ],
@@ -212,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.centerRight,
                         child: Card(
                           elevation: 10,
                           child: Container(
@@ -235,91 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      drawer: SafeArea(
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Container(
-                color: Colors.green[700],
-                width: width,
-                height: height * 0.3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person_pin_circle,
-                        size: 80,
-                        color: Color.fromRGBO(28, 179, 54, 1.0),
-                      ),
-                      maxRadius: 40,
-                    ),
-                    Text(
-                      "Saher Samir",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Chip(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(
-                            Icons.star,
-                            color: Colors.orange[300],
-                          ),
-                          SizedBox(
-                            width: width * 0.005,
-                          ),
-                          Text(
-                            "5",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.dashboard),
-                title: Text("Main Menu"),
-              ),
-              ListTile(
-                leading: Icon(Icons.watch_later),
-                title: Text("Previous Trips"),
-              ),
-              ListTile(
-                leading: Icon(Icons.monetization_on),
-                title: Text("My Wallet"),
-                trailing: Chip(
-                  backgroundColor: Colors.grey[800],
-                  labelStyle: TextStyle(color: Colors.white),
-                  label: Text("0 EGP"),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.card_membership),
-                title: Text("Promo Code"),
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("Settings"),
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: MyDrawer(),
     );
   }
 }
